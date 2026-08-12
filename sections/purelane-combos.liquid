@@ -1,0 +1,136 @@
+{{ 'purelane-combos.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign combo_blocks = section.blocks | where: 'type', 'combo'
+-%}
+
+<section class="purelane-section" id="combos" data-section-id="{{ section.id }}">
+  <div class="purelane-wrap">
+    <div class="purelane-panel-head">
+      {%- if section.settings.kicker != blank -%}
+        <span class="purelane-kicker">{{ section.settings.kicker }}</span>
+      {%- endif -%}
+      <h2 class="purelane-heading">{{ section.settings.heading }}</h2>
+      <div class="purelane-rule" aria-hidden="true">
+        <i></i>
+        {% render 'purelane-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+      {%- if section.settings.lede != blank -%}
+        <div class="purelane-lede">{{ section.settings.lede }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if combo_blocks.size > 0 -%}
+      <div class="purelane-comborail" role="region" aria-label="{{ section.settings.heading | escape }}" tabindex="0">
+        {%- for block in combo_blocks -%}
+          {%- liquid
+            assign combo = block.settings.product
+          -%}
+          {%- if combo != blank -%}
+            {%- liquid
+              assign included = combo.metafields.custom.included_products.value
+              assign included_names = included | map: 'title'
+              assign included_count = included_names.size
+              assign is_featured = false
+              if combo.metafields.custom.featured.value
+                assign is_featured = true
+              endif
+            -%}
+            <article
+              class="purelane-combo purelane-glass purelane-card-hover{% if is_featured %} purelane-combo--featured{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <div class="purelane-combo__tray">
+                {%- if combo.compare_at_price > combo.price -%}
+                  {%- assign savings_amount = combo.compare_at_price | minus: combo.price | money -%}
+                  <span class="purelane-combo__save">
+                    {{ 'purelane.combos.you_save' | t: amount: savings_amount }}
+                  </span>
+                {%- endif -%}
+                {%- if combo.metafields.custom.badge_label.value != blank -%}
+                  <span class="purelane-combo__flag">{{ combo.metafields.custom.badge_label.value }}</span>
+                {%- endif -%}
+                {%- if included_count > 0 -%}
+                  <div class="purelane-combo__stack">
+                    {%- for item in included -%}
+                      <span class="purelane-combo__item">
+                        {% render 'purelane-media', image: item.featured_image, alt: item.title, class: 'purelane-combo__item-image', sizes: '80px' %}
+                        <span>{{ item.title }}</span>
+                      </span>
+                      {%- unless forloop.last -%}<span class="purelane-combo__plus" aria-hidden="true">+</span>{%- endunless -%}
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="purelane-combo__body">
+                <h3 class="purelane-combo__title">
+                  <a href="{{ combo.url }}">{{ combo.title }}</a>
+                </h3>
+                {%- if included_count > 0 -%}
+                  <div class="purelane-combo__count">{{ 'purelane.combos.products_count' | t: count: included_count }}</div>
+                {%- endif -%}
+                <p class="purelane-combo__includes">
+                  {%- if included_count > 0 -%}
+                    {%- capture includes_list -%}
+                      {%- for name in included_names -%}
+                        {%- if forloop.first -%}{{ name }}
+                        {%- elsif forloop.last -%} &amp; {{ name }}
+                        {%- else -%}, {{ name }}
+                        {%- endif -%}
+                      {%- endfor -%}
+                    {%- endcapture -%}
+                    {{ 'purelane.combos.includes' | t: list: includes_list | strip }}.
+                  {%- endif -%}
+                  {{ combo.description | strip_html }}
+                </p>
+                {% render 'purelane-price', product: combo, savings_style: 'amount' %}
+                <div class="purelane-combo__fine">{{ 'purelane.combos.fine_print' | t }}</div>
+                <a class="purelane-btn {% if is_featured %}purelane-btn--primary{% else %}purelane-btn--ghost{% endif %} purelane-btn--full" href="{{ combo.url }}">
+                  {{ 'purelane.combos.cta' | t }}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+                </a>
+              </div>
+            </article>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="purelane-combos__swipecue" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+        {{ 'purelane.combos.scroll_hint' | t }}
+      </div>
+      {%- if section.settings.railnote != blank -%}
+        <p class="purelane-combos__railnote">{{ section.settings.railnote }}</p>
+      {%- endif -%}
+    {%- else -%}
+      <p class="purelane-shop__empty">{{ 'purelane.combos.no_combos' | t }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane combos",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Pre-built to save you money" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Best selling combos" },
+    { "type": "richtext", "id": "lede", "label": "Supporting text", "default": "<p>Swipe through the boxes people order most. Each one is already priced below buying the same products on their own.</p>" },
+    { "type": "text", "id": "railnote", "label": "Note below the rail (optional)" }
+  ],
+  "blocks": [
+    {
+      "type": "combo",
+      "name": "Combo",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Combo product",
+          "info": "A real product priced for the bundle. Set its compare-at price to show savings, and add custom.included_products / custom.badge_label / custom.featured metafields — see docs/METAFIELDS.md."
+        }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Purelane combos" }]
+}
+{% endschema %}
