@@ -1,0 +1,20 @@
+{% comment %}
+  Star rating + review count for Shop product cards.
+  Stars are decorative (aria-hidden); the numeric rating is announced via
+  a visually-hidden label instead of relying on unicode glyphs alone —
+  the prototype's bare "★ 4.8 · 237 reviews" had no accessible text.
+
+  Accepts:
+  - rating: decimal 0-5 (from product.metafields.custom.rating_average)
+  - count: integer (from product.metafields.custom.rating_count)
+{% endcomment %}
+
+{%- if rating != blank and count != blank -%}
+  <div class="purelane-rating">
+    <span aria-hidden="true">★ {{ rating }}</span>
+    <span class="purelane-visually-hidden">
+      {{ 'purelane.shop.rating_label' | t: rating: rating }}
+    </span>
+    <span>· {{ 'purelane.shop.reviews_count' | t: count: count }}</span>
+  </div>
+{%- endif -%}

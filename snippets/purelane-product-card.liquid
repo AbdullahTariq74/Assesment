@@ -1,0 +1,31 @@
+{% comment %}
+  A single product card for the Shop grid. Its own snippet (rather than
+  inlined in the section loop) because it's the shape most likely to be
+  reused elsewhere later (related products, search results) — Combos and
+  Bundles share its underlying primitives (glass chrome, price row,
+  full-width button) but not its layout, so they're not forced through
+  this same snippet. See docs/BUILD-NOTES.md.
+
+  Accepts:
+  - product: {Object} required
+  - section_id: {String} parent section id, for unique form ids
+{% endcomment %}
+
+<article class="purelane-card purelane-glass purelane-card-hover">
+  <div class="purelane-card__shot">
+    {%- if product.metafields.custom.badge_label.value != blank -%}
+      <span class="purelane-badge">{{ product.metafields.custom.badge_label.value }}</span>
+    {%- endif -%}
+    {% render 'purelane-media', image: product.featured_image, alt: product.title, sizes: '(min-width: 860px) 25vw, 50vw', class: 'purelane-card__image' %}
+  </div>
+
+  <h3 class="purelane-card__title">
+    <a href="{{ product.url }}">{{ product.title }}</a>
+  </h3>
+
+  {% render 'purelane-rating', rating: product.metafields.custom.rating_average.value, count: product.metafields.custom.rating_count.value %}
+
+  {% render 'purelane-price', product: product, savings_style: 'percent' %}
+
+  {% render 'purelane-add-to-cart', product: product, button_class: 'purelane-btn--sm', section_id: section_id %}
+</article>

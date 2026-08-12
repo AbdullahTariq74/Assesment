@@ -1,0 +1,47 @@
+{% comment %}
+  Renders one responsive product image with a real srcset, or Dawn's
+  built-in placeholder SVG when a product has no image (the prototype
+  used base64-encoded placeholder silhouettes baked into the CSS via
+  custom properties — this replaces that with real, art-directable
+  Shopify media plus a graceful "no image" state for merchant-editability).
+
+  Accepts:
+  - image: {Object} an image/media object (e.g. product.featured_media)
+  - alt: {String} accessible alt text (falls back to image.alt)
+  - class: {String} extra classes on the <img>/placeholder svg
+  - sizes: {String} the sizes attribute; caller knows its own layout
+  - widths: {Array} srcset widths to generate; default covers small
+    cards through full-bleed hero use
+  - loading: 'lazy' (default) or 'eager' — pass 'eager' for the hero,
+    which is always above the fold
+  - placeholder: which Dawn placeholder illustration to use when there's
+    no image, default 'product-1'
+{% endcomment %}
+
+{%- liquid
+  assign img_widths = widths | default: '165,360,533,720,940' | split: ','
+  assign img_loading = loading | default: 'lazy'
+  assign img_placeholder = placeholder | default: 'product-1'
+  assign img_alt = alt | default: image.alt | escape
+-%}
+{%- if image -%}
+  <img
+    srcset="
+      {%- for w in img_widths -%}
+        {%- assign w = w | strip | times: 1 -%}
+        {%- if image.width >= w -%}{{ image | image_url: width: w }} {{ w }}w,{%- endif -%}
+      {%- endfor -%}
+      {{ image | image_url }} {{ image.width }}w
+    "
+    src="{{ image | image_url: width: 533 }}"
+    {% if sizes %}sizes="{{ sizes }}"{% endif %}
+    alt="{{ img_alt }}"
+    class="purelane-media {{ class }}"
+    {% if img_loading == 'lazy' %}loading="lazy"{% endif %}
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+  >
+{%- else -%}
+  {%- assign placeholder_class = 'purelane-media purelane-media--placeholder ' | append: class -%}
+  {{ img_placeholder | placeholder_svg_tag: placeholder_class }}
+{%- endif -%}

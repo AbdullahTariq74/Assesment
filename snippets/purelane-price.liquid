@@ -1,0 +1,40 @@
+{% comment %}
+  Renders a price row: current price, struck compare-at price, and a
+  savings pill — shared by the Shop, Combos, Bundles and Hero sections.
+  All figures come from the product's real price/compare_at_price, never
+  hardcoded (see docs/METAFIELDS.md).
+
+  Accepts:
+  - product: a product, or any object exposing .price / .compare_at_price
+    in the shop's smallest currency unit (a product object works as-is;
+    for a specific variant pass that variant instead).
+  - savings_style: 'percent' (default, "33% off") or 'amount' ("Save ₹398")
+  - id: optional string suffix to keep element ids unique when this
+    snippet renders more than once on the page (e.g. inside a loop)
+{% endcomment %}
+
+{%- liquid
+  assign target = product
+  assign on_sale = false
+  if target.compare_at_price > target.price
+    assign on_sale = true
+  endif
+-%}
+<div class="purelane-price-row">
+  <span class="purelane-price">{{ target.price | money }}</span>
+  {%- if on_sale -%}
+    <s class="purelane-price-compare">
+      <span class="purelane-visually-hidden">{{ 'products.product.price.regular_price' | t }}</span>
+      {{ target.compare_at_price | money }}
+    </s>
+    <span class="purelane-price-discount">
+      {%- if savings_style == 'amount' -%}
+        {%- assign savings_amount = target.compare_at_price | minus: target.price | money -%}
+        {{ 'purelane.price.save_amount' | t: amount: savings_amount }}
+      {%- else -%}
+        {%- assign discount_pct = target.compare_at_price | minus: target.price | times: 100.0 | divided_by: target.compare_at_price | round -%}
+        {{ 'purelane.price.percent_off' | t: percent: discount_pct }}
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</div>

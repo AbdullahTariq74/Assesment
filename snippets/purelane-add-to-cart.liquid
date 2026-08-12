@@ -1,0 +1,51 @@
+{% comment %}
+  Real, working add-to-cart button for a product card — the prototype's
+  <button class="btn">Add to cart</button> had no form, no variant id and
+  no handler anywhere, so it did nothing. This wraps Dawn's existing
+  <product-form> custom element (assets/product-form.js) and AJAX cart
+  flow (cart-notification/cart-drawer), just styled to match Purelane's
+  pill buttons instead of Dawn's default button classes. Reused by Shop,
+  Combos and Bundles cards.
+
+  Accepts:
+  - product: {Object} required
+  - button_class: {String} extra classes, e.g. 'purelane-btn--sm'
+  - section_id: {String} the parent section's id, for a unique form id
+{% endcomment %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'purelane-product-form-' | append: section_id | append: '-' | append: product.id
+-%}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+<product-form>
+  <div class="product-form__error-message-wrapper purelane-visually-hidden" role="alert" hidden>
+    <span class="product-form__error-message"></span>
+  </div>
+  {%- form 'product', product, id: form_id, novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+    <input
+      type="hidden"
+      name="id"
+      value="{{ variant.id }}"
+      {% if variant.available == false or variant == null %}disabled{% endif %}
+    >
+    <button
+      type="submit"
+      name="add"
+      class="purelane-btn purelane-btn--ghost purelane-btn--full {{ button_class }}"
+      {% if variant.available == false or variant == null %}disabled aria-disabled="true"{% endif %}
+    >
+      <span>
+        {%- if variant == null -%}
+          {{ 'products.product.unavailable' | t }}
+        {%- elsif variant.available == false -%}
+          {{ 'products.product.sold_out' | t }}
+        {%- else -%}
+          {{ 'products.product.add_to_cart' | t }}
+        {%- endif -%}
+      </span>
+      {%- render 'loading-spinner' -%}
+    </button>
+  {%- endform -%}
+</product-form>
