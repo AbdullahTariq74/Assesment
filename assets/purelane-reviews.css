@@ -1,0 +1,182 @@
+/* Reviews rail — ported from purelane-homepage.html .revband/.revrail.
+   Production fix (see docs/BUILD-NOTES.md): the prototype's marquee only
+   paused on :hover/:focus-within, but its cards contained no focusable
+   element, so keyboard-only users had no way to stop the motion (a likely
+   WCAG 2.2.2 issue). This version makes each card's heading focusable and
+   adds a real pause/play button. */
+
+.purelane-revband {
+  padding: var(--purelane-section-y) 0;
+}
+
+.purelane-revhead {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px 18px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.purelane-revhead .purelane-agg {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--purelane-paper-70);
+}
+
+.purelane-revhead .purelane-agg b {
+  font-family: var(--purelane-font-display);
+  font-size: 16px;
+  color: var(--purelane-accent);
+  letter-spacing: 0;
+}
+
+.purelane-revhead .purelane-stars {
+  color: #7a9c1e;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+}
+
+.purelane-revrail {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+
+.purelane-revtrack {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  .purelane-revtrack {
+    animation: purelane-marquee 52s linear infinite;
+  }
+
+  @media screen and (max-width: 760px) {
+    .purelane-revtrack {
+      animation-duration: 40s;
+    }
+  }
+
+  .purelane-revrail:hover .purelane-revtrack,
+  .purelane-revrail:focus-within .purelane-revtrack,
+  .purelane-revrail[data-paused="true"] .purelane-revtrack {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes purelane-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.purelane-rcard {
+  flex: 0 0 auto;
+  width: 284px;
+  padding: 15px 17px;
+  border-radius: 18px;
+}
+
+@media screen and (max-width: 760px) {
+  .purelane-rcard {
+    width: 250px;
+    padding: 13px 14px;
+  }
+}
+
+.purelane-rcard .purelane-stars {
+  color: var(--purelane-accent);
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  margin-bottom: 9px;
+}
+
+.purelane-rcard h3 {
+  font-family: var(--purelane-font-display);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--purelane-surface);
+  margin: 0 0 7px;
+}
+
+.purelane-rcard h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.purelane-rcard h3 a:focus-visible {
+  outline: 2px solid var(--purelane-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.purelane-rcard p {
+  font-size: 12.6px;
+  color: var(--purelane-paper-70);
+  line-height: 1.52;
+  margin: 0 0 11px;
+}
+
+.purelane-rcard__who {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--purelane-paper-50);
+}
+
+.purelane-rcard__who b {
+  color: var(--purelane-surface);
+  font-weight: 700;
+}
+
+.purelane-rcard__who svg {
+  width: 12px;
+  height: 12px;
+  color: var(--purelane-green);
+  flex: 0 0 auto;
+}
+
+.purelane-reviews__toggle {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.purelane-reviews__toggle button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--purelane-paper-50);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.purelane-reviews__toggle button:hover {
+  color: var(--purelane-surface);
+}
