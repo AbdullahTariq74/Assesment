@@ -1,0 +1,100 @@
+/* Shop / product grid — ported from purelane-homepage.html .shelf/.card.
+   Production fixes made here (see docs/BUILD-NOTES.md):
+   - a 3-up tablet step was added; the prototype jumped straight from
+     2 columns to 4 with nothing in between ~760-860px
+   - card titles are clamped to 2 lines so a very long product title
+     can't blow out the grid's row height */
+
+.purelane-shop__shelf {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+@media screen and (min-width: 640px) {
+  .purelane-shop__shelf {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 860px) {
+  .purelane-shop__shelf {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.purelane-card {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.purelane-card__shot {
+  height: 150px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6), rgba(236, 230, 247, 0.42));
+  border: 1px solid rgba(75, 58, 143, 0.1);
+}
+
+@media screen and (max-width: 760px) {
+  .purelane-card__shot {
+    height: 126px;
+  }
+}
+
+.purelane-card__image {
+  max-height: 122px;
+  width: auto;
+  filter: drop-shadow(0 8px 13px rgba(0, 74, 66, 0.13));
+}
+
+.purelane-card__title {
+  font-family: var(--purelane-font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--purelane-surface);
+  line-height: 1.2;
+  margin: 0 0 7px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+
+.purelane-card__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.purelane-card .purelane-rating {
+  margin-bottom: 10px;
+}
+
+.purelane-card .purelane-price-row {
+  margin-top: auto;
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.purelane-card .purelane-price-row .purelane-price {
+  font-size: 18px;
+}
+
+.purelane-shop__empty {
+  padding: 40px 18px;
+  text-align: center;
+  color: var(--purelane-paper-70);
+}
+
+.purelane-shop__footer {
+  text-align: center;
+  margin-top: 22px;
+}

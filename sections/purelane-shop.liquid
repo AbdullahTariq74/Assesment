@@ -1,0 +1,62 @@
+{{ 'purelane-shop.css' | asset_url | stylesheet_tag }}
+
+<section class="purelane-section" id="shop" data-section-id="{{ section.id }}">
+  <div class="purelane-wrap">
+    <div class="purelane-panel-head">
+      {%- if section.settings.kicker != blank -%}
+        <span class="purelane-kicker">{{ section.settings.kicker }}</span>
+      {%- endif -%}
+      <h2 class="purelane-heading">{{ section.settings.heading }}</h2>
+      <div class="purelane-rule" aria-hidden="true">
+        <i></i>
+        {% render 'purelane-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+    </div>
+
+    {%- if section.settings.collection == blank -%}
+      <p class="purelane-shop__empty">
+        {{ 'purelane.shop.select_collection' | t }}
+      </p>
+    {%- elsif section.settings.collection.products.size == 0 -%}
+      <p class="purelane-shop__empty">{{ 'purelane.shop.no_products' | t }}</p>
+    {%- else -%}
+      <div class="purelane-shop__shelf">
+        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+          {% render 'purelane-product-card', product: product, section_id: section.id %}
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_view_all and section.settings.collection.url != blank -%}
+        <div class="purelane-shop__footer">
+          <a class="purelane-btn purelane-btn--ghost" href="{{ section.settings.collection.url }}">
+            {{ section.settings.view_all_text }}
+          </a>
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane shop",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Bestsellers" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Loved by 30,000 homes" },
+    { "type": "collection", "id": "collection", "label": "Collection" },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 4,
+      "max": 16,
+      "step": 4,
+      "default": 8
+    },
+    { "type": "checkbox", "id": "show_view_all", "label": "Show \"View all\" button", "default": true },
+    { "type": "text", "id": "view_all_text", "label": "\"View all\" button label", "default": "View all" }
+  ],
+  "presets": [{ "name": "Purelane shop" }]
+}
+{% endschema %}
