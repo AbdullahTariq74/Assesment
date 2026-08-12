@@ -1,0 +1,176 @@
+{{ 'purelane-hero.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'purelane-hero.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign slide_blocks = section.blocks | where: 'type', 'slide'
+  assign promise_blocks = section.blocks | where: 'type', 'promise'
+-%}
+
+<section class="purelane-hero" data-section-id="{{ section.id }}">
+  <div class="purelane-hero__grid">
+    {%- if promise_blocks.size > 0 -%}
+      <div class="purelane-hero__badges purelane-glass-2" aria-label="{{ 'purelane.hero.badges_label' | t }}">
+        {%- for block in promise_blocks -%}
+          <div class="purelane-hero__badge" {{ block.shopify_attributes }}>
+            <span class="purelane-hero__badge-icon">{% render 'purelane-icon', icon: block.settings.icon %}</span>
+            <span>{{ block.settings.text }}</span>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="purelane-hero__copy">
+      <h1 class="purelane-hero__heading">
+        {{ section.settings.heading_line_1 }}<br>{{ section.settings.heading_line_2 }}<br><span class="purelane-hero__accent">{{ section.settings.heading_accent }}</span>
+      </h1>
+
+      <div class="purelane-rule" aria-hidden="true">
+        <i></i>
+        {% render 'purelane-icon', icon: 'leaf' %}
+        <i></i>
+      </div>
+
+      {%- if section.settings.lede != blank -%}
+        <div class="purelane-lede">{{ section.settings.lede }}</div>
+      {%- endif -%}
+
+      <div class="purelane-hero__cta">
+        {%- if section.settings.primary_cta_text != blank -%}
+          <a class="purelane-btn purelane-btn--primary" href="{{ section.settings.primary_cta_link | default: '#' }}">
+            {{ section.settings.primary_cta_text }}
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_cta_text != blank -%}
+          <a class="purelane-btn purelane-btn--ghost" href="{{ section.settings.secondary_cta_link | default: '#' }}">{{ section.settings.secondary_cta_text }}</a>
+        {%- endif -%}
+      </div>
+
+      {%- if promise_blocks.size > 0 -%}
+        <div class="purelane-hero__badgestrip">
+          {%- for block in promise_blocks -%}
+            <div class="purelane-glass-2" {{ block.shopify_attributes }}>
+              {% render 'purelane-icon', icon: block.settings.icon %}
+              {{ block.settings.text }}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- if slide_blocks.size > 0 -%}
+      <div class="purelane-hero__stage-wrap">
+        <purelane-hero-stage>
+          <div class="purelane-hero__stage" data-slide-count="{{ slide_blocks.size }}">
+            {%- for block in slide_blocks -%}
+              {%- liquid
+                assign product_keys = 'product_1,product_2,product_3' | split: ','
+                assign product_count = 0
+                for key in product_keys
+                  assign slide_product = block.settings[key]
+                  if slide_product != blank
+                    assign product_count = product_count | plus: 1
+                  endif
+                endfor
+              -%}
+              <div
+                class="purelane-hero__slide{% if forloop.first %} is-active{% endif %}"
+                data-count="{{ product_count }}"
+                {{ block.shopify_attributes }}
+              >
+                {%- for key in product_keys -%}
+                  {%- assign slide_product = block.settings[key] -%}
+                  {%- if slide_product != blank -%}
+                    <span class="purelane-hero__product">
+                      {% render 'purelane-media', image: slide_product.featured_image, alt: slide_product.title, loading: 'eager', widths: '165,360,533', sizes: '(min-width: 901px) 30vw, 60vw' %}
+                    </span>
+                  {%- endif -%}
+                {%- endfor -%}
+                {%- if block.settings.product_1 != blank -%}
+                  <div class="purelane-hero__ptag purelane-glass-2">
+                    {%- if block.settings.label != blank -%}
+                      <span class="purelane-hero__ptag-label">{{ block.settings.label }}</span>
+                    {%- endif -%}
+                    {% render 'purelane-price', product: block.settings.product_1, savings_style: 'amount' %}
+                  </div>
+                {%- endif -%}
+              </div>
+            {%- endfor -%}
+          </div>
+          {%- if slide_blocks.size > 1 -%}
+            <div class="purelane-hero__dots" role="tablist" aria-label="Product options">
+              {%- for block in slide_blocks -%}
+                <button
+                  type="button"
+                  role="tab"
+                  class="{% if forloop.first %}is-active{% endif %}"
+                  aria-label="{{ 'purelane.hero.slide_label' | t: index: forloop.index, total: forloop.length }}"
+                  aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                ></button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        </purelane-hero-stage>
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Purelane hero",
+  "class": "purelane-section-wrapper",
+  "settings": [
+    { "type": "header", "content": "Heading" },
+    { "type": "text", "id": "heading_line_1", "label": "Heading, line 1", "default": "Clean" },
+    { "type": "text", "id": "heading_line_2", "label": "Heading, line 2", "default": "That" },
+    { "type": "text", "id": "heading_accent", "label": "Heading, accent line", "default": "Lasts" },
+    { "type": "richtext", "id": "lede", "label": "Supporting text", "default": "<p>Homecare that works on the toughest grime, made from plants. Kind to your home, your family and the world outside it.</p>" },
+    { "type": "header", "content": "Buttons" },
+    { "type": "text", "id": "primary_cta_text", "label": "Primary button label", "default": "Shop now" },
+    { "type": "url", "id": "primary_cta_link", "label": "Primary button link" },
+    { "type": "text", "id": "secondary_cta_text", "label": "Secondary button label", "default": "How it works" },
+    { "type": "url", "id": "secondary_cta_link", "label": "Secondary button link" }
+  ],
+  "blocks": [
+    {
+      "type": "promise",
+      "name": "Promise badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "leaf",
+          "options": [
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "zero", "label": "Crossed circle" }
+          ]
+        },
+        { "type": "text", "id": "text", "label": "Text", "default": "Plant powered" }
+      ]
+    },
+    {
+      "type": "slide",
+      "name": "Product option",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Label", "info": "Shown above the price, e.g. \"Single bottle\" or \"Any 2 products\".", "default": "Single bottle" },
+        { "type": "product", "id": "product_1", "label": "Product (sets the price shown)" },
+        { "type": "product", "id": "product_2", "label": "Second product image (optional)", "info": "Adds a second bottle to the illustration without changing the price." },
+        { "type": "product", "id": "product_3", "label": "Third product image (optional)" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane hero",
+      "blocks": [
+        { "type": "promise", "settings": { "icon": "leaf", "text": "Plant powered" } },
+        { "type": "promise", "settings": { "icon": "shield", "text": "Safe for kids & pets" } },
+        { "type": "promise", "settings": { "icon": "zero", "text": "Zero harsh chemicals" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
