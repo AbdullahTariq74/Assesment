@@ -63,6 +63,9 @@
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
     {%- endif -%}
 
+    {{ 'component-purelane.css' | asset_url | stylesheet_tag }}
+    {% render 'purelane-theme-colors' %}
+
     {{ content_for_header }}
 
     {%- liquid

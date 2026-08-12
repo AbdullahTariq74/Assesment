@@ -1466,5 +1466,48 @@
         "label": "t:settings_schema.customer_accounts.settings.customer_account_menu.label"
       }
     ]
+  },
+  {
+    "name": "Purelane brand colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Purelane sections"
+      },
+      {
+        "type": "paragraph",
+        "content": "Colors used by the Hero, Shop, Combos, Bundles and Reviews sections. Defaults match the approved brand palette."
+      },
+      {
+        "type": "color",
+        "id": "purelane_color_background",
+        "label": "Section background",
+        "default": "#f4f0fb"
+      },
+      {
+        "type": "color",
+        "id": "purelane_color_surface",
+        "label": "Heading color",
+        "default": "#17102b"
+      },
+      {
+        "type": "color",
+        "id": "purelane_color_brand",
+        "label": "Brand purple",
+        "default": "#4b3a8f"
+      },
+      {
+        "type": "color",
+        "id": "purelane_color_accent",
+        "label": "Accent (prices, CTAs)",
+        "default": "#b8701c"
+      },
+      {
+        "type": "color",
+        "id": "purelane_color_green",
+        "label": "Icon accent green",
+        "default": "#4f7d10"
+      }
+    ]
   }
 ]

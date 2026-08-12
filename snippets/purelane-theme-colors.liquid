@@ -1,0 +1,15 @@
+{% comment %}
+  Overrides the Purelane section color tokens (defined in
+  assets/component-purelane.css) with the merchant-editable values from
+  Theme settings -> Purelane brand colors, so the palette used by Hero,
+  Shop, Combos, Bundles and Reviews can be changed without touching code.
+{% endcomment %}
+{% style %}
+  :root {
+    --purelane-ink: {{ settings.purelane_color_background }};
+    --purelane-surface: {{ settings.purelane_color_surface }};
+    --purelane-brand: {{ settings.purelane_color_brand }};
+    --purelane-accent: {{ settings.purelane_color_accent }};
+    --purelane-green: {{ settings.purelane_color_green }};
+  }
+{% endstyle %}

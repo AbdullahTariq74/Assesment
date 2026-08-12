@@ -1,0 +1,318 @@
+/* Purelane homepage sections — shared design tokens and card system.
+   Ported from purelane-homepage.html's "V2" (live) palette; V1's dead
+   dark-mode layer and orphaned PDP rules were not carried over.
+   See docs/METAFIELDS.md and docs/BUILD-NOTES.md for what changed and why. */
+
+:root {
+  --purelane-ink: #f4f0fb;
+  --purelane-brand: #4b3a8f;
+  --purelane-brand-light: #6b55b8;
+  --purelane-paper: #241a3d;
+  --purelane-paper-70: rgba(36, 26, 61, 0.78);
+  --purelane-paper-50: rgba(36, 26, 61, 0.56);
+  --purelane-accent: #b8701c;
+  --purelane-accent-2: #c9761d;
+  --purelane-surface: #17102b;
+  --purelane-green: #4f7d10;
+  --purelane-green-light: #7a9c1e;
+
+  --purelane-radius: 26px;
+  --purelane-radius-sm: 16px;
+  --purelane-maxw: 1180px;
+  --purelane-section-y: 34px;
+  --purelane-font-display: "Outfit", system-ui, sans-serif;
+  --purelane-font-body: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@media screen and (max-width: 760px) {
+  :root {
+    --purelane-section-y: 22px;
+  }
+}
+
+.purelane-section {
+  padding: var(--purelane-section-y) 0;
+}
+
+.purelane-wrap {
+  max-width: var(--purelane-maxw);
+  margin: 0 auto;
+  padding: 0 18px;
+}
+
+.purelane-kicker {
+  font-family: var(--purelane-font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--purelane-accent);
+}
+
+.purelane-heading {
+  font-family: var(--purelane-font-display);
+  font-weight: 700;
+  color: var(--purelane-surface);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  font-size: clamp(28px, 4.4vw, 44px);
+  margin: 6px 0 0;
+}
+
+/* Shared "glass" card chrome used by product / combo / bundle cards. */
+.purelane-glass {
+  position: relative;
+  border-radius: var(--purelane-radius);
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.42)
+  );
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  box-shadow:
+    0 1px 1px rgba(23, 16, 43, 0.04),
+    0 18px 40px -20px rgba(23, 16, 43, 0.22);
+  overflow: hidden;
+}
+
+.purelane-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.35),
+    transparent 40%
+  );
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .purelane-card-hover {
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .purelane-card-hover:hover {
+    transform: translateY(-5px);
+  }
+}
+
+/* Badge / flag shown on product & combo cards (custom.badge_label). */
+.purelane-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  font-family: var(--purelane-font-display);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: var(--purelane-surface);
+  color: #fff;
+}
+
+/* Price row shared by Shop / Combos / Bundles — snippets/price-row.liquid */
+.purelane-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-family: var(--purelane-font-display);
+}
+
+.purelane-price-row .purelane-price {
+  font-weight: 800;
+  color: var(--purelane-surface);
+}
+
+.purelane-price-row .purelane-price-compare {
+  font-weight: 500;
+  color: var(--purelane-paper-50);
+  text-decoration: line-through;
+}
+
+.purelane-price-row .purelane-price-discount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--purelane-accent);
+}
+
+.purelane-rating {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--purelane-paper-70);
+}
+
+.purelane-rating .purelane-rating-value {
+  font-weight: 700;
+  color: var(--purelane-surface);
+}
+
+.purelane-lede {
+  font-size: clamp(15px, 1.35vw, 17.5px);
+  color: var(--purelane-paper-70);
+  max-width: 44ch;
+  margin: 14px auto 0;
+}
+
+.purelane-rule {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 0 auto;
+  max-width: 240px;
+  justify-content: center;
+}
+
+.purelane-rule i {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(75, 58, 143, 0.34));
+}
+
+.purelane-rule i:first-child {
+  background: linear-gradient(90deg, transparent, rgba(75, 58, 143, 0.34));
+  transform: scaleX(-1);
+}
+
+.purelane-rule svg {
+  width: 16px;
+  height: 16px;
+  color: var(--purelane-accent);
+  flex: 0 0 auto;
+}
+
+.purelane-panel-head {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+/* Glass-2: lighter card chrome used by badges & review cards */
+.purelane-glass-2 {
+  position: relative;
+  border-radius: var(--purelane-radius);
+  background: linear-gradient(
+    158deg,
+    rgba(255, 255, 255, 0.66),
+    rgba(236, 230, 247, 0.44)
+  );
+  border: 1px solid rgba(75, 58, 143, 0.13);
+  box-shadow:
+    0 16px 38px rgba(58, 44, 112, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.86);
+}
+
+/* ---------- Buttons ---------- */
+.purelane-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-family: var(--purelane-font-body);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+.purelane-btn.loading {
+  color: transparent;
+}
+
+.purelane-btn.loading > .loading__spinner {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.purelane-btn.loading > .loading__spinner .path {
+  stroke: currentColor;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .purelane-btn {
+    transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), background 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+}
+
+.purelane-btn svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+.purelane-btn--primary {
+  background: linear-gradient(135deg, #00706a, #004b46);
+  color: #f4fdf6;
+  box-shadow: 0 12px 26px rgba(0, 80, 74, 0.26), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.purelane-btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 36px rgba(0, 80, 74, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.purelane-btn--ghost {
+  background: rgba(255, 255, 255, 0.66);
+  border: 1px solid rgba(75, 58, 143, 0.22);
+  color: #01423b;
+}
+
+.purelane-btn--ghost:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-2px);
+}
+
+.purelane-btn--sm {
+  height: 38px;
+  padding: 0 18px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+}
+
+.purelane-btn--full {
+  width: 100%;
+}
+
+.purelane-btn[disabled],
+.purelane-btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Scroll-reveal-on-load uses Dawn's own scroll-trigger/animate--slide-in
+   system (assets/animations.js + base.css) rather than a bespoke one —
+   it already handles reduced-motion, the theme editor's design-mode
+   bypass, and the "Animations" theme setting merchants can turn off.
+   See docs/BUILD-NOTES.md for why this replaced the prototype's .rv
+   IntersectionObserver reveal. */
+
+.purelane-visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
