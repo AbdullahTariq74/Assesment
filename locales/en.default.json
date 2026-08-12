@@ -528,5 +528,43 @@
       "send_on": "YYYY-MM-DD",
       "send_on_label": "Send on (optional)"
     }
+  },
+  "purelane": {
+    "price": {
+      "percent_off": "{{ percent }}% off",
+      "save_amount": "Save {{ amount }}"
+    },
+    "hero": {
+      "slide_label": "Product option {{ index }} of {{ total }}",
+      "badges_label": "Product promises"
+    },
+    "shop": {
+      "select_collection": "Select a collection in the theme editor to show products here.",
+      "no_products": "This collection has no products yet.",
+      "reviews_count": "{{ count }} reviews",
+      "rating_label": "Rated {{ rating }} out of 5 stars"
+    },
+    "combos": {
+      "you_save": "You save {{ amount }}",
+      "includes": "Includes: {{ list }}",
+      "products_count": "{{ count }} products",
+      "scroll_hint": "Swipe for more combos",
+      "fine_print": "Inclusive of all taxes",
+      "cta": "Shop bundle",
+      "no_combos": "Add a combo block in the theme editor and pick a product for it."
+    },
+    "bundles": {
+      "products_label": "Products",
+      "per_product": "Flat {{ amount }} per product",
+      "cta_default": "Build this box",
+      "no_tiers": "Add a bundle tier block in the theme editor and pick a product for it."
+    },
+    "reviews": {
+      "rating_label": "Rated {{ rating }} out of 5 stars",
+      "region_label": "Customer reviews, auto-scrolling. Paused while focused or hovered.",
+      "pause": "Pause",
+      "play": "Play",
+      "no_reviews": "Add a review block in the theme editor and pick a review metaobject entry for it."
+    }
   }
 }
