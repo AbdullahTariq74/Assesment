@@ -1,0 +1,132 @@
+/* Bundles — ported from purelane-homepage.html .tiers/.tier. */
+
+.purelane-tiers {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 760px) {
+  .purelane-tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.purelane-tier {
+  padding: 24px 22px;
+}
+
+.purelane-tier--featured {
+  border-color: rgba(201, 118, 29, 0.46);
+  box-shadow: 0 22px 54px rgba(58, 44, 112, 0.14), 0 0 0 1px rgba(201, 118, 29, 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+
+.purelane-tier__tag {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 5px 11px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  background: rgba(201, 118, 29, 0.14);
+  border: 1px solid rgba(201, 118, 29, 0.34);
+  color: var(--purelane-green);
+}
+
+.purelane-tier__pix {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 78px;
+  margin: -4px 0 16px;
+  padding: 8px 6px;
+  border-radius: 14px;
+  background: linear-gradient(162deg, rgba(255, 255, 255, 0.54), rgba(236, 230, 247, 0.34));
+  border: 1px solid rgba(75, 58, 143, 0.11);
+}
+
+.purelane-tier__pix-image {
+  max-height: 62px;
+  width: auto;
+  filter: drop-shadow(0 5px 8px rgba(0, 74, 66, 0.13));
+}
+
+@media screen and (max-width: 760px) {
+  .purelane-tier__pix {
+    height: 70px;
+  }
+
+  .purelane-tier__pix-image {
+    max-height: 54px;
+  }
+}
+
+.purelane-tier__qty {
+  font-family: var(--purelane-font-display);
+  font-weight: 800;
+  font-size: 52px;
+  line-height: 0.9;
+  color: var(--purelane-surface);
+  letter-spacing: -0.03em;
+}
+
+@media screen and (max-width: 760px) {
+  .purelane-tier__qty {
+    font-size: 44px;
+  }
+}
+
+.purelane-tier__qty small {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--purelane-paper-50);
+  display: block;
+  margin-top: 6px;
+}
+
+.purelane-tier__price {
+  font-family: var(--purelane-font-display);
+  font-weight: 700;
+  font-size: 27px;
+  color: var(--purelane-accent);
+  margin: 16px 0 4px;
+}
+
+.purelane-tier__price .purelane-price-compare {
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.purelane-tier__per-unit {
+  font-size: 14.5px;
+  color: var(--purelane-paper-70);
+  line-height: 1.66;
+  margin: 0;
+}
+
+.purelane-tier__perks {
+  list-style: none;
+  margin: 16px 0 20px;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.purelane-tier__perks li {
+  display: flex;
+  gap: 9px;
+  font-size: 13px;
+  color: var(--purelane-paper-70);
+}
+
+.purelane-tier__perks svg {
+  width: 14px;
+  height: 14px;
+  color: var(--purelane-accent);
+  flex: 0 0 auto;
+  margin-top: 4px;
+}
