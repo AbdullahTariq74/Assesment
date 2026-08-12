@@ -1,0 +1,24 @@
+# Added by code-review-graph
+.code-review-graph/
+
+# AI tool config clutter not relevant to this Shopify assignment
+.cursorrules
+.windsurfrules
+AGENTS.md
+CLAUDE.md
+GEMINI.md
+QODER.md
+.kiro/
+.qoder/
+.claude/
+.opencode.json
+.mcp.json
+
+# Shopify CLI / theme dev
+.shopify/
+.env
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db
