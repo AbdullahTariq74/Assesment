@@ -53,12 +53,26 @@
   were right) but rendered as empty-state until I found this via a
   GraphQL introspection query — cost a full debugging round that a
   documented gotcha would have skipped entirely.
-- **Browser automation for visual QA never got a stable session** against
-  the password-gated preview theme in this sandbox. I burned real time
-  on it before cutting losses and relying on curl + content assertions
-  (verifiably correct, but not a pixel-level check) instead of
-  screenshots. Flagged in build notes as something to do properly with
-  more time / a less constrained environment.
+- **Browser automation against the password-gated preview theme never
+  got a stable session** in this sandbox — cookies that worked fine in
+  curl didn't carry the same way through the headless browser's own
+  redirect handling. I initially cut my losses and shipped on
+  curl + content assertions alone (verifiably correct, but not a
+  pixel-level check). When asked directly to close that gap, the actual
+  fix wasn't to keep fighting the auth flow: fetch the real rendered
+  HTML with curl (which worked reliably), rewrite its protocol-relative
+  URLs to absolute, and load *that* into the headless browser instead of
+  asking it to authenticate against Shopify itself. Once I could
+  actually see the page, I immediately found two real bugs code review
+  had missed — a grid miscounting its own children (3 items into a
+  2-column `1fr auto` grid) that put the hero heading and product image
+  on the wrong sides of the page, and a background color seam between
+  Hero and Reviews that isn't visible in either section's CSS in
+  isolation, only in how they sit next to each other. Both are exactly
+  the class of bug that only exists at the render step — no amount of
+  re-reading the CSS would have surfaced either one. The lesson isn't
+  "browser tooling is unreliable," it's that I should have tried a
+  second access strategy before concluding the check wasn't possible.
 
 ## What I'd systematize for the next 20 of these
 
@@ -76,3 +90,8 @@
   first failure. I added title-based dedup to the seed script only
   after it died partway through on a missing API scope — should be the
   starting shape, not a patch.
+- **"Fetch real HTML, render it locally" as the default visual-QA
+  strategy for any gated/staging environment**, not a last resort.
+  Fighting a headless browser's cookie jar against a password wall
+  cost real time before I tried the much simpler workaround; next time
+  that's the first thing I reach for, not the third.

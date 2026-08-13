@@ -86,8 +86,35 @@
   none of the 5 required sections depend on them, and the water
   cinematics in particular (huge inline SVGs, a `requestAnimationFrame`
   loop, mix-blend-mode layers) are a real Core Web Vitals risk for the
-  return they give. The Hero and Reviews sections sit on a plain
-  brand-color background instead.
+  return they give. Hero and Reviews share a static gradient background
+  instead (they're the same "scene" in the source file); Combos,
+  Bundles and Shop sit on the theme's plain background.
+- **Contrast on small accent-colored text was measured, not eyeballed.**
+  I computed WCAG contrast ratios for every place `--purelane-accent`/
+  `--purelane-green` render as text (kickers, discount pills, "you
+  save" tags) and several fell short of 4.5:1 at their actual size —
+  none of them are large enough for the 3:1 large-text exemption.
+  Darkened both tokens just enough to clear AA everywhere they're used
+  (`#b8701c → #9c5f18`, `#4f7d10 → #4c790f`) — a contrast fix, not a
+  recolor; the difference isn't perceptible at a glance.
+- **Product photography is a generated bottle-silhouette placeholder**,
+  not a flat color swatch. This is a fictional brand with no real
+  product photos; a flat gradient rectangle was technically real,
+  uploaded, processed Shopify media, but visually easy to mistake for a
+  missing image. Redrew it as a flat bottle icon (cap + body + label
+  window, transparent background) matching the prototype's own base64
+  SVG product-art style.
+- **Got a real browser render working against the gated dev store** by
+  fetching the actual page HTML (which authenticates fine over plain
+  HTTP), rewriting its protocol-relative URLs to absolute, and loading
+  that into a headless browser locally — sidesteps the password wall
+  entirely since it never has to authenticate against Shopify itself.
+  This caught two real bugs code review alone had missed: the desktop
+  promise-badge rail was a 3rd item competing with a 2-column grid,
+  putting the hero heading and product image on the wrong sides of the
+  page; and it exposed a CSS cascade trap where a section's re-declared
+  shared stylesheet link could re-win a specificity tie against another
+  section's override, depending on section order. Both fixed.
 
 ## What I'd do with more time
 
@@ -98,11 +125,17 @@
   probably a small custom-element modal that lets a shopper pick N
   products into a bundle line-item property, rather than linking straight
   to the tier product.
-- Automated visual regression (Percy/Playwright screenshots) at the
-  breakpoints the CSS actually keys off — I verified data correctness
-  and zero Liquid errors via the rendered HTML, but pixel-level visual
-  diffing against the prototype needs a real browser session I couldn't
-  get stable in this sandboxed environment (see `scripts/README.md`).
+- A proper automated visual regression pipeline (Percy/Playwright,
+  actual pixel diffing against the prototype at each breakpoint) rather
+  than the manual real-browser screenshot checks I ended up doing —
+  those caught real layout bugs (see above) but it was a one-off
+  investigation, not something that re-runs on every change.
+- A real Lighthouse/PageSpeed number. The practices are in place
+  (lazy-loading, responsive srcset, scoped per-section CSS/JS, no
+  layout-shift-causing missing dimensions) and I confirmed no obvious
+  issues in the real render, but an actual CWV score needs a live,
+  non-password-gated URL — the same constraint applies to anyone
+  reviewing this from the outside, not just to me.
 - A tablet-specific pass on the Combos scroll rail — it's usable but the
   scroll-snap card width (302px) wasn't re-tuned for the 3-up tablet
   range the way the Shop grid was.
