@@ -83,18 +83,25 @@
   margin-top: 26px;
 }
 
-/* Desktop side rail of promise badges */
-.purelane-hero__badges {
+/* Desktop side rail of promise badges — absolutely positioned like the
+   prototype's .badges (position:absolute;right:18px;top:50%), not a grid
+   participant, so it doesn't compete with copy/stage-wrap for the grid's
+   2 defined columns. */
+.purelane-hero__badges.purelane-glass-2 {
   display: none;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
   flex-direction: column;
   gap: 2px;
   width: 96px;
   padding: 12px 8px;
-  align-self: center;
 }
 
 @media screen and (min-width: 901px) {
-  .purelane-hero__badges {
+  .purelane-hero__badges.purelane-glass-2 {
     display: flex;
   }
 }

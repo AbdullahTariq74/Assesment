@@ -5,8 +5,12 @@
    WCAG 2.2.2 issue). This version makes each card's heading focusable and
    adds a real pause/play button. */
 
+/* Same background as Hero — both share the prototype's "scene 1", so
+   they should read as one continuous zone rather than hero's green
+   cutting hard to the page's plain background right below it. */
 .purelane-revband {
   padding: var(--purelane-section-y) 0;
+  background: linear-gradient(178deg, #fbfffb 0%, #eafaec 30%, #d6f1dc 68%, #bfe8ca 100%);
 }
 
 .purelane-revhead {
