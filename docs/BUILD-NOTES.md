@@ -56,6 +56,20 @@
 - **Colors are theme settings** (Theme settings → Purelane brand colors),
   not hardcoded hex, defaulting to the approved palette. Fonts stay on
   Dawn's own font picker rather than a hardcoded Google Fonts `<link>`.
+- **A second, independent review pass** against this brief's own grading
+  bar (theme-editor safety, accessibility, reduced motion, Core Web
+  Vitals, merchant editability, correctness) caught real issues after
+  the sections "worked": Bundles had no accessible name for a tier at
+  all (title existed only as `alt` text inside an `aria-hidden`
+  wrapper); Combos/Bundles CTAs all read "Shop bundle"/"Build this box"
+  verbatim with nothing to disambiguate them out of visual context;
+  several product/review titles rendered unescaped where Dawn's own
+  snippets consistently escape them; a `{%- endif -%}` was eating the
+  space between the generated "Includes:" sentence and the product
+  description; `product-form.js` was loading once per card instead of
+  once per section; the shared design-token CSS was loading sitewide
+  instead of scoped to the 5 sections that use it. All fixed — see the
+  git history for the actual diffs.
 - **Cut, deliberately, for scope**: the full-page "scenes" water/parallax
   cinematic background, the ticker, the right-side scroll-progress rail,
   and the "why it works" product rotator. All bonus-scope per the brief;
