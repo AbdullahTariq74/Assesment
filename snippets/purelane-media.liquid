@@ -5,13 +5,16 @@
   custom properties — this replaces that with real, art-directable
   Shopify media plus a graceful "no image" state for merchant-editability).
 
+  Widths are fixed literals (matching Dawn's own card-product.liquid
+  convention) rather than a parsed comma-string, since Liquid's filters
+  don't reliably coerce split-string values back to Integer for size
+  comparisons.
+
   Accepts:
   - image: {Object} an image/media object (e.g. product.featured_media)
   - alt: {String} accessible alt text (falls back to image.alt)
   - class: {String} extra classes on the <img>/placeholder svg
   - sizes: {String} the sizes attribute; caller knows its own layout
-  - widths: {Array} srcset widths to generate; default covers small
-    cards through full-bleed hero use
   - loading: 'lazy' (default) or 'eager' — pass 'eager' for the hero,
     which is always above the fold
   - placeholder: which Dawn placeholder illustration to use when there's
@@ -19,7 +22,6 @@
 {% endcomment %}
 
 {%- liquid
-  assign img_widths = widths | default: '165,360,533,720,940' | split: ','
   assign img_loading = loading | default: 'lazy'
   assign img_placeholder = placeholder | default: 'product-1'
   assign img_alt = alt | default: image.alt | escape
@@ -27,10 +29,11 @@
 {%- if image -%}
   <img
     srcset="
-      {%- for w in img_widths -%}
-        {%- assign w = w | strip | times: 1 -%}
-        {%- if image.width >= w -%}{{ image | image_url: width: w }} {{ w }}w,{%- endif -%}
-      {%- endfor -%}
+      {%- if image.width >= 165 -%}{{ image | image_url: width: 165 }} 165w,{%- endif -%}
+      {%- if image.width >= 360 -%}{{ image | image_url: width: 360 }} 360w,{%- endif -%}
+      {%- if image.width >= 533 -%}{{ image | image_url: width: 533 }} 533w,{%- endif -%}
+      {%- if image.width >= 720 -%}{{ image | image_url: width: 720 }} 720w,{%- endif -%}
+      {%- if image.width >= 940 -%}{{ image | image_url: width: 940 }} 940w,{%- endif -%}
       {{ image | image_url }} {{ image.width }}w
     "
     src="{{ image | image_url: width: 533 }}"

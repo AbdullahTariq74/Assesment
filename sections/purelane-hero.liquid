@@ -82,7 +82,7 @@
                   {%- assign slide_product = block.settings[key] -%}
                   {%- if slide_product != blank -%}
                     <span class="purelane-hero__product">
-                      {% render 'purelane-media', image: slide_product.featured_image, alt: slide_product.title, loading: 'eager', widths: '165,360,533', sizes: '(min-width: 901px) 30vw, 60vw' %}
+                      {% render 'purelane-media', image: slide_product.featured_image, alt: slide_product.title, loading: 'eager', sizes: '(min-width: 901px) 30vw, 60vw' %}
                     </span>
                   {%- endif -%}
                 {%- endfor -%}
