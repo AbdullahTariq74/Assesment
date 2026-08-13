@@ -10,10 +10,10 @@
   --purelane-paper: #241a3d;
   --purelane-paper-70: rgba(36, 26, 61, 0.78);
   --purelane-paper-50: rgba(36, 26, 61, 0.56);
-  --purelane-accent: #b8701c;
+  --purelane-accent: #9c5f18; /* darkened slightly from the source file's #b8701c for AA contrast on small text — see docs/BUILD-NOTES.md */
   --purelane-accent-2: #c9761d;
   --purelane-surface: #17102b;
-  --purelane-green: #4f7d10;
+  --purelane-green: #4c790f; /* darkened slightly from the source file's #4f7d10, same reason */
   --purelane-green-light: #7a9c1e;
 
   --purelane-radius: 26px;

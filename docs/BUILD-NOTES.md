@@ -56,6 +56,16 @@
 - **Colors are theme settings** (Theme settings → Purelane brand colors),
   not hardcoded hex, defaulting to the approved palette. Fonts stay on
   Dawn's own font picker rather than a hardcoded Google Fonts `<link>`.
+- **The accent and green tokens are darkened slightly** from the source
+  file's `#b8701c`/`#4f7d10` to `#9c5f18`/`#4c790f`. I ran the actual
+  numbers (WCAG relative-luminance contrast ratio) for every place these
+  colors are used as text — kickers, discount pills, "you save" tags —
+  and several fell just under the 4.5:1 AA threshold for normal-size
+  text (3.5–4.4:1 at 13px/9.5px/8.4px, none of which qualify as "large
+  text"). The new values clear 4.6:1+ everywhere they're used, including
+  on the lightest card/pill backgrounds, and are close enough to the
+  originals that the visual difference is not perceptible at a glance —
+  this is a contrast fix, not a recolor.
 - **A second, independent review pass** against this brief's own grading
   bar (theme-editor safety, accessibility, reduced motion, Core Web
   Vitals, merchant editability, correctness) caught real issues after

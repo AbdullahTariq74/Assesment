@@ -1500,13 +1500,15 @@
         "type": "color",
         "id": "purelane_color_accent",
         "label": "Accent (prices, CTAs)",
-        "default": "#b8701c"
+        "default": "#9c5f18",
+        "info": "Darkened slightly from the source file's #b8701c so small accent-colored text (kickers, discount pills) meets WCAG AA contrast on the page background — see docs/BUILD-NOTES.md."
       },
       {
         "type": "color",
         "id": "purelane_color_green",
         "label": "Icon accent green",
-        "default": "#4f7d10"
+        "default": "#4c790f",
+        "info": "Darkened slightly from the source file's #4f7d10 for the same AA contrast reason as the accent color above."
       }
     ]
   }
