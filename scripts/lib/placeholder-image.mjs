@@ -2,10 +2,14 @@ import zlib from 'node:zlib';
 
 // Minimal, dependency-free PNG encoder — used only to generate placeholder
 // product photography for the seed catalog (see docs/BUILD-NOTES.md: this
-// is a fictional brand with no real product photos, so each product gets
-// a simple two-tone swatch in the brand palette instead of leaving every
-// card blank). One seed product deliberately gets no image at all, to
-// exercise the theme's real "no image" placeholder state.
+// is a fictional brand with no real product photos). Draws a simple flat
+// bottle silhouette with a transparent background and a label-window
+// highlight, in the same visual language as the prototype's own base64 SVG
+// product art (rounded cap + rounded body + a lighter inset "label" rect) —
+// closer to a real product icon than a plain color swatch, and transparent
+// so it drops cleanly onto any card background. One seed product
+// deliberately gets no image at all, to exercise the theme's real
+// "no image" placeholder state.
 
 const CRC_TABLE = (() => {
   const table = new Uint32Array(256);
@@ -41,13 +45,44 @@ function hexToRgb(hex) {
   return [parseInt(clean.slice(0, 2), 16), parseInt(clean.slice(2, 4), 16), parseInt(clean.slice(4, 6), 16)];
 }
 
-/** Returns a base64-encoded PNG: a vertical two-tone gradient between
- * topHex and bottomHex, width x height pixels. */
+/** True if (x, y) falls inside a rounded rectangle. */
+function inRoundedRect(x, y, rx, ry, rw, rh, radius) {
+  if (x < rx || x >= rx + rw || y < ry || y >= ry + rh) return false;
+  const cx = Math.min(Math.max(x, rx + radius), rx + rw - radius);
+  const cy = Math.min(Math.max(y, ry + radius), ry + rh - radius);
+  const dx = x - cx;
+  const dy = y - cy;
+  return dx * dx + dy * dy <= radius * radius;
+}
+
+/**
+ * Returns a base64-encoded RGBA PNG: a flat bottle silhouette (cap + body +
+ * a lighter label window), vertical gradient between topHex/bottomHex,
+ * transparent everywhere else.
+ */
 export function makePlaceholderPng(width, height, topHex, bottomHex) {
   const [tr, tg, tb] = hexToRgb(topHex);
   const [br, bg, bb] = hexToRgb(bottomHex);
 
-  const rowBytes = width * 3 + 1; // +1 filter byte per scanline
+  const capW = width * 0.34;
+  const capH = height * 0.09;
+  const capX = (width - capW) / 2;
+  const capY = height * 0.03;
+  const capRadius = capW * 0.28;
+
+  const bodyW = width * 0.64;
+  const bodyH = height * 0.84;
+  const bodyX = (width - bodyW) / 2;
+  const bodyY = capY + capH - height * 0.01;
+  const bodyRadius = bodyW * 0.16;
+
+  const labelW = bodyW * 0.62;
+  const labelH = bodyH * 0.34;
+  const labelX = (width - labelW) / 2;
+  const labelY = bodyY + bodyH * 0.24;
+  const labelRadius = labelW * 0.06;
+
+  const rowBytes = width * 4 + 1; // +1 filter byte per scanline
   const raw = Buffer.alloc(rowBytes * height);
 
   for (let y = 0; y < height; y++) {
@@ -57,11 +92,31 @@ export function makePlaceholderPng(width, height, topHex, bottomHex) {
     const b = Math.round(tb + (bb - tb) * t);
     const rowStart = y * rowBytes;
     raw[rowStart] = 0; // filter: none
+
     for (let x = 0; x < width; x++) {
-      const px = rowStart + 1 + x * 3;
-      raw[px] = r;
-      raw[px + 1] = g;
-      raw[px + 2] = b;
+      const px = rowStart + 1 + x * 4;
+      const inCap = inRoundedRect(x, y, capX, capY, capW, capH, capRadius);
+      const inBody = inRoundedRect(x, y, bodyX, bodyY, bodyW, bodyH, bodyRadius);
+
+      if (inCap || inBody) {
+        const inLabel = inRoundedRect(x, y, labelX, labelY, labelW, labelH, labelRadius);
+        if (inLabel) {
+          raw[px] = 250;
+          raw[px + 1] = 247;
+          raw[px + 2] = 253;
+          raw[px + 3] = 225;
+        } else {
+          raw[px] = r;
+          raw[px + 1] = g;
+          raw[px + 2] = b;
+          raw[px + 3] = 255;
+        }
+      } else {
+        raw[px] = 0;
+        raw[px + 1] = 0;
+        raw[px + 2] = 0;
+        raw[px + 3] = 0;
+      }
     }
   }
 
@@ -69,7 +124,7 @@ export function makePlaceholderPng(width, height, topHex, bottomHex) {
   ihdr.writeUInt32BE(width, 0);
   ihdr.writeUInt32BE(height, 4);
   ihdr[8] = 8; // bit depth
-  ihdr[9] = 2; // color type: RGB
+  ihdr[9] = 6; // color type: RGBA
   ihdr[10] = 0; // compression
   ihdr[11] = 0; // filter
   ihdr[12] = 0; // interlace
