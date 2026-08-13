@@ -1,3 +1,5 @@
+{{ 'component-purelane.css' | asset_url | stylesheet_tag }}
+{% render 'purelane-theme-colors' %}
 {{ 'purelane-reviews.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'purelane-reviews.js' | asset_url }}" defer="defer"></script>
 
@@ -35,14 +37,14 @@
                   <h3>
                     <a href="{{ review.product.value.url | default: '#reviews' }}">
                       <span class="purelane-visually-hidden">{{ 'purelane.reviews.rating_label' | t: rating: review.rating.value }}</span>
-                      {{ review.title.value }}
+                      {{ review.title.value | escape }}
                     </a>
                   </h3>
-                  <p>{{ review.body.value }}</p>
+                  <p>{{ review.body.value | escape }}</p>
                   <div class="purelane-rcard__who">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
-                    <b>{{ review.author.value }}</b>
-                    {%- if review.product.value.title != blank -%}<span>· {{ review.product.value.title }}</span>{%- endif -%}
+                    <b>{{ review.author.value | escape }}</b>
+                    {%- if review.product.value.title != blank -%}<span>· {{ review.product.value.title | escape }}</span>{%- endif -%}
                   </div>
                 </article>
               {%- endif -%}
@@ -53,12 +55,12 @@
               {%- if review != blank -%}
                 <article class="purelane-rcard purelane-glass-2" aria-hidden="true" tabindex="-1">
                   <div class="purelane-stars" aria-hidden="true">★★★★★</div>
-                  <h3>{{ review.title.value }}</h3>
-                  <p>{{ review.body.value }}</p>
+                  <h3>{{ review.title.value | escape }}</h3>
+                  <p>{{ review.body.value | escape }}</p>
                   <div class="purelane-rcard__who">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m5 13 4 4L19 7"/></svg>
-                    <b>{{ review.author.value }}</b>
-                    {%- if review.product.value.title != blank -%}<span>· {{ review.product.value.title }}</span>{%- endif -%}
+                    <b>{{ review.author.value | escape }}</b>
+                    {%- if review.product.value.title != blank -%}<span>· {{ review.product.value.title | escape }}</span>{%- endif -%}
                   </div>
                 </article>
               {%- endif -%}

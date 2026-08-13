@@ -1,3 +1,5 @@
+{{ 'component-purelane.css' | asset_url | stylesheet_tag }}
+{% render 'purelane-theme-colors' %}
 {{ 'purelane-hero.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'purelane-hero.js' | asset_url }}" defer="defer"></script>
 
@@ -72,6 +74,10 @@
                     assign product_count = product_count | plus: 1
                   endif
                 endfor
+                assign slide_image_loading = 'lazy'
+                if forloop.first
+                  assign slide_image_loading = 'eager'
+                endif
               -%}
               <div
                 class="purelane-hero__slide{% if forloop.first %} is-active{% endif %}"
@@ -82,7 +88,7 @@
                   {%- assign slide_product = block.settings[key] -%}
                   {%- if slide_product != blank -%}
                     <span class="purelane-hero__product">
-                      {% render 'purelane-media', image: slide_product.featured_image, alt: slide_product.title, loading: 'eager', sizes: '(min-width: 901px) 30vw, 60vw' %}
+                      {% render 'purelane-media', image: slide_product.featured_image, alt: slide_product.title, loading: slide_image_loading, sizes: '(min-width: 901px) 30vw, 60vw' %}
                     </span>
                   {%- endif -%}
                 {%- endfor -%}
@@ -98,7 +104,7 @@
             {%- endfor -%}
           </div>
           {%- if slide_blocks.size > 1 -%}
-            <div class="purelane-hero__dots" role="tablist" aria-label="Product options">
+            <div class="purelane-hero__dots" role="tablist" aria-label="{{ 'purelane.hero.dots_label' | t }}">
               {%- for block in slide_blocks -%}
                 <button
                   type="button"

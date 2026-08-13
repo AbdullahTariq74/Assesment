@@ -536,7 +536,8 @@
     },
     "hero": {
       "slide_label": "Product option {{ index }} of {{ total }}",
-      "badges_label": "Product promises"
+      "badges_label": "Product promises",
+      "dots_label": "Product options"
     },
     "shop": {
       "select_collection": "Select a collection in the theme editor to show products here.",
@@ -549,14 +550,11 @@
       "includes": "Includes: {{ list }}",
       "products_count": "{{ count }} products",
       "scroll_hint": "Swipe for more combos",
-      "fine_print": "Inclusive of all taxes",
-      "cta": "Shop bundle",
       "no_combos": "Add a combo block in the theme editor and pick a product for it."
     },
     "bundles": {
       "products_label": "Products",
       "per_product": "Flat {{ amount }} per product",
-      "cta_default": "Build this box",
       "no_tiers": "Add a bundle tier block in the theme editor and pick a product for it."
     },
     "reviews": {

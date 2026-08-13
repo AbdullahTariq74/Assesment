@@ -1,4 +1,7 @@
+{{ 'component-purelane.css' | asset_url | stylesheet_tag }}
+{% render 'purelane-theme-colors' %}
 {{ 'purelane-shop.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
 <section class="purelane-section" id="shop" data-section-id="{{ section.id }}">
   <div class="purelane-wrap">

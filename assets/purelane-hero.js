@@ -54,7 +54,11 @@ class PurelaneHeroStage extends HTMLElement {
   goTo(index) {
     this.activeIndex = (index + this.slides.length) % this.slides.length;
     this.slides.forEach((slide, i) => slide.classList.toggle('is-active', i === this.activeIndex));
-    this.dots.forEach((dot, i) => dot.classList.toggle('is-active', i === this.activeIndex));
+    this.dots.forEach((dot, i) => {
+      const isActive = i === this.activeIndex;
+      dot.classList.toggle('is-active', isActive);
+      dot.setAttribute('aria-selected', String(isActive));
+    });
   }
 
   play() {

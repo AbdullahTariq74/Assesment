@@ -4,8 +4,10 @@
   no handler anywhere, so it did nothing. This wraps Dawn's existing
   <product-form> custom element (assets/product-form.js) and AJAX cart
   flow (cart-notification/cart-drawer), just styled to match Purelane's
-  pill buttons instead of Dawn's default button classes. Reused by Shop,
-  Combos and Bundles cards.
+  pill buttons instead of Dawn's default button classes. Used by the
+  Shop grid card, once per product — the caller is responsible for
+  loading assets/product-form.js once at the section level (not from
+  here), since this snippet can render many times per page.
 
   Accepts:
   - product: {Object} required
@@ -17,8 +19,6 @@
   assign variant = product.selected_or_first_available_variant
   assign form_id = 'purelane-product-form-' | append: section_id | append: '-' | append: product.id
 -%}
-<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
-
 <product-form>
   <div class="product-form__error-message-wrapper purelane-visually-hidden" role="alert" hidden>
     <span class="product-form__error-message"></span>
