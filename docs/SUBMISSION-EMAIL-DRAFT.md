@@ -6,7 +6,7 @@ Hi,
 Here's my submission for the AI Product Engineer assignment.
 
 **Dev store URL:** https://purelane-dev-xxar3arp.myshopify.com
-**Password:** Dracarys74@
+**Password:** 12345678
 
 The build is on a separate unpublished theme called "Purelane (Dawn build)", so the store's default theme hasn't been touched. Direct preview link (same password):
 https://purelane-dev-xxar3arp.myshopify.com?preview_theme_id=166005965050
