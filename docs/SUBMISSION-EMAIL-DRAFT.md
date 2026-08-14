@@ -3,78 +3,43 @@
 
 Hi,
 
-Submission for the AI Product Engineer assignment below.
+Here's my submission for the AI Product Engineer assignment.
 
 **Dev store URL:** https://purelane-dev-xxar3arp.myshopify.com
 **Password:** Dracarys74@
 
-The build lives on an unpublished theme called "Purelane (Dawn build)" so the store's default theme is untouched. Direct preview link (same password):
+The build is on a separate unpublished theme called "Purelane (Dawn build)", so the store's default theme hasn't been touched. Direct preview link (same password):
 https://purelane-dev-xxar3arp.myshopify.com?preview_theme_id=166005965050
 
-**GitHub repo (commit history intact):**
-https://github.com/AbdullahTariq74/Assesment
+**GitHub repo:** https://github.com/AbdullahTariq74/Assesment (commit history is all there)
 
-All five required sections are built: Hero, Shop, Combos, Bundles, Reviews. The store is seeded with 18 products (10 individual + 5 combos + 3 bundle tiers), including the sold-out, no-image, and very-long-title edge cases, plus 5 reviews.
-
----
+All five required sections are built: Hero, Shop, Combos, Bundles, Reviews. The store has 18 seeded products (10 individual, 5 combos, 3 bundle tiers), including the sold out, no image, and very long title cases, plus 5 reviews.
 
 **Metafield and metaobject definitions**
 
-Full schema with reasoning: https://github.com/AbdullahTariq74/Assesment/blob/master/docs/METAFIELDS.md
+I've documented the full schema and the reasoning behind it here: https://github.com/AbdullahTariq74/Assesment/blob/master/docs/METAFIELDS.md
 
-Provisioned via a scripted, reproducible Admin API flow rather than clicked by hand — see https://github.com/AbdullahTariq74/Assesment/tree/master/scripts
+I set these up with scripts against the Admin API instead of clicking through the admin by hand, so they're reproducible. Scripts are here: https://github.com/AbdullahTariq74/Assesment/tree/master/scripts
 
-- Product metafields (namespace `custom`): `badge_label`, `featured`, `included_products` (list.product_reference), `bundle_perks` (list.single_line_text_field), `bundle_product_count`, `rating_average`, `rating_count`
-- Metaobject `review`: `rating`, `title`, `body`, `author`, `product` (reference)
-
----
+Quick summary: product metafields under the `custom` namespace are `badge_label`, `featured`, `included_products`, `bundle_perks`, `bundle_product_count`, `rating_average` and `rating_count`. There's also a `review` metaobject with `rating`, `title`, `body`, `author` and a product reference.
 
 **Notes on the build**
 
-What I'd flag about the original file:
-- Two full `<style>` blocks — the first is a complete dark layout+palette, the second overrides only colors and wins the cascade outright. Net result is the first block's layout with the second's colors; easy to miss and ship the wrong palette.
-- The Shop grid has 8 cards for only 4 unique products (two different image techniques applied to the same 4, never reconciled).
-- Add-to-cart, the mobile nav drawer, and email signup are all non-functional in the source file (no form, no handler).
-- The reviews marquee pauses on hover/focus, but no element inside a review card is focusable — a keyboard-only visitor had no way to stop it.
+A few things worth flagging about the original file. It actually has two full style blocks: the first is a complete dark layout and palette, and the second only overrides colors but wins the cascade outright. So what ships is the first block's layout with the second's colors, which is easy to miss if you don't read the whole thing. The shop grid also has 8 cards for only 4 unique products (two different image techniques applied to the same 4, never reconciled). Add to cart, the mobile nav drawer and the email signup are all non functional in the source file, no form or handler behind any of them. And the reviews marquee only pauses on hover or focus, but nothing inside a review card is actually focusable, so a keyboard only visitor has no way to stop it.
 
-What I changed, and why:
-- Combos and Bundles are real Shopify products, so price/compare-price/savings come from the platform, not Liquid math. Combos generate their "Includes: A, B & C" copy from a real product-reference metafield instead of hand-written prose.
-- Reviews are a metaobject (Shopify has no native review object); documented as a stand-in for a real reviews app once one's installed.
-- Add-to-cart now wraps Dawn's own `<product-form>` / AJAX cart flow instead of staying inert.
-- Reused Dawn's own scroll-reveal system instead of porting a parallel one.
-- Added a 3-up tablet breakpoint the Shop grid was missing, and clamped card titles to 2 lines so a long title can't break the row.
-- Ran actual WCAG contrast numbers on the accent/green colors rather than eyeballing them — several small-text uses fell short of AA, so both tokens are darkened just enough to clear it (visually the same at a glance).
-- Cut deliberately, for scope: the full-page animated "scenes" water/parallax background, the ticker, the scroll-progress rail, and the product rotator. All bonus per the brief, and the water cinematics specifically were a real Core Web Vitals risk for what they'd add.
+On what I changed and why: Combos and Bundles are real Shopify products now, so price, compare price and savings all come from the platform instead of being calculated in Liquid. Combos generate their "Includes: A, B & C" line from a real product reference metafield rather than hand written copy. Reviews are a metaobject since Shopify has no native review object, and I've noted it as a stand in for a proper reviews app later. Add to cart now actually works, wired into Dawn's own product form and cart flow instead of just sitting there. I reused Dawn's existing scroll reveal system instead of writing a second one. I added a 3 up tablet breakpoint the shop grid was missing, and clamped card titles to two lines so a long title can't break the layout. I also ran actual contrast numbers on the accent and green colors instead of just eyeballing them, a few of the smaller text uses fell short of AA, so I darkened both slightly to pass (barely noticeable visually). And I deliberately cut the full page animated background, the ticker, the scroll progress rail and the product rotator since they're all bonus scope, and the animated background in particular would have been a real hit to performance for what it adds.
 
-What I'd do with more time:
-- Wire a real reviews app instead of the metaobject stand-in.
-- Build the actual "bundle picker" the source copy implies but never implements.
-- A proper automated visual-regression pipeline instead of the manual checks I ended up doing.
-- An actual Lighthouse/PageSpeed number — the practices are in place, but a real score needs a live, non-password-gated URL.
-
----
+With more time, I'd wire up a real reviews app instead of the metaobject stand in, build the actual bundle picker the source copy implies but never implements, set up a proper automated visual regression pipeline instead of the manual checks I did, and get an actual Lighthouse score once the store isn't behind a password wall.
 
 **Notes on my AI workflow**
 
-What I delegated:
-- A full read of the 1716-line prototype file to an agent, which returned a structured report (exact colors, breakpoints, JS behavior per section) that I built every section from directly.
-- Store provisioning — metafield/metaobject definitions, the seed catalog, publishing to the Online Store channel, wiring real references into the template — all scripted against the Admin API instead of clicked by hand.
-- A second, independent QA pass against the brief's own grading bar before calling anything done.
+I had an agent read through the whole 1716 line prototype file once and hand back a structured report of exact colors, breakpoints and JS behaviour per section, and built every section from that instead of going back to the source file each time. Store setup (metafields, seed catalog, publishing everything to the Online Store channel, wiring real data into the template) was all scripted against the Admin API rather than done by hand. And I ran a second independent QA pass against the brief's own bar before calling anything finished.
 
-Where it failed me:
-- Liquid syntax I was confident about was wrong more than once — chaining a filter onto a translation tag's output instead of one of its arguments, the same mistake three separate times before I caught the pattern.
-- GraphQL type names recalled from memory were sometimes wrong (`InventoryItemUpdateInput` doesn't exist; the real type is `InventoryItemInput`) — needed the live API's error message to fix.
-- A runtime type-coercion bug static checking is structurally blind to: assumed a filter would coerce a split string back to an integer for a size comparison; it silently didn't, and broke every product image until I actually rendered the page.
-- Guessed the wrong serialization format for theme block settings twice (GID, then numeric ID) before finding that product/collection/metaobject settings all resolve by handle — there's no error when it's wrong, the setting just renders blank.
-- Missed that products created via the Admin API aren't published to any sales channel by default — cost a full debugging round.
-- Automated browser QA against the password-gated store didn't work at first; the fix was fetching the real page HTML and rendering it locally instead of fighting the login flow. Once I could actually see the page, that caught two real layout bugs code review alone had missed.
+Where it actually went wrong: Liquid syntax I was confident about turned out wrong more than once, chaining a filter onto a translation tag's output instead of one of its arguments, same mistake three times before I caught it. GraphQL type names from memory were sometimes off too (InventoryItemUpdateInput doesn't exist, it's InventoryItemInput) and needed the live API's error to sort out. There was a runtime type coercion bug that static checking just can't see: I assumed a filter would turn a split string back into an integer for a size comparison, it silently didn't, and it broke every product image until I actually rendered the page and looked. I also guessed the wrong format for theme block settings twice before finding they resolve by handle, not GID or numeric ID, and there's no error when it's wrong, the setting just quietly renders blank. I missed that products created through the Admin API aren't published to any sales channel by default, which cost a whole debugging round. And automated browser testing against the password protected store didn't work at first, so instead of fighting the login flow I just fetched the real page HTML and rendered it locally, which is what let me actually catch two real layout bugs that code review alone had missed.
 
-What I'd systematize for twenty more of these:
-- A written cheat sheet of Shopify serialization gotchas (setting value formats, the publish-to-Online-Store step, GraphQL type names) so I'm not re-deriving them empirically each time.
-- A render-and-check smoke test as a required step after every seed/config script, not just a final pass — `theme check` is necessary but not sufficient.
-- Idempotency by default in seed scripts from the start, not bolted on after the first partial failure.
+If I had to do twenty more of these, I'd want a written cheat sheet of Shopify quirks like this so I'm not rediscovering them each time, a render and check step built into every seed script instead of only at the end, and idempotency in seed scripts from the start rather than added after the first failure.
 
-Happy to walk through any of these decisions in more depth.
+Happy to talk through any of this in more detail.
 
 Thanks,
 Abdullah
